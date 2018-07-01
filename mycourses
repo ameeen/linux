@@ -1,0 +1,468 @@
+if [ -f courses ]
+then
+  echo 
+else
+  echo Course_Id:Full_Name:ISBN_Number:InstructorName1"_"InstructorName2 > courses
+fi
+   condition=false
+   until $condition
+   do
+clear
+echo "enter the choice from (1-4)..."
+echo 1-Add Course.
+echo 2-Modify Course.
+echo 3-Search Courses.
+echo 4-EXIT.
+
+#i make it like passwd file delemeter :
+
+read x
+case $x in
+1)
+clear
+condi=false
+until $condi
+do
+clear
+echo "=================================== Add Course ================================="
+echo Course Id :
+read courseId
+while [ "$courseId" != "$(echo $courseId | grep [a-z][a-z][a-z][a-z][0-9][0-9][0-9])" ]
+do
+	echo "plz enter the course id in format like xxxx###(java321) :"
+	read courseId
+done
+
+echo Full Name : 
+read fullName
+
+echo Book ISBN Number : 
+read isbn
+while [ "$isbn" != "$(echo $isbn | grep [0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9])" ]
+do
+  	echo "plz try agian in format like ##-###-##### (00-000-00000) : "
+  	read isbn
+done
+
+echo Instructor First Name : 
+read instName1
+echo Instructor Last Name :
+read instName2
+
+exist=$courseId:$fullName:$isbn:$instName1"_"$instName2
+if [ "$exist" = "$(cat courses | grep $exist)" ]
+then
+  echo this course "'"$courseId"'" is alreay exist so you can"'"t add this in system
+else 
+  echo $courseId:$fullName:$isbn:$instName1"_"$instName2 >> courses
+fi
+
+echo "do you want to add another courses ? (y or n)"
+read yn
+	if [ "$yn" = "n" ]
+	then
+	condi=true
+	elif [ "$yn" = "y" ]
+        then
+	condi=false
+        fi
+done
+;;
+
+2)
+#here is to Modify Course
+clear
+
+   condit=false
+   until $condit
+   do
+   clear
+echo "=============================== Modify Course =================================="
+echo "enter your choice from (a-c) :"
+echo a")" Delete Course
+echo b")" Delete All Courses
+echo c")" Modify Course Info
+read cho
+
+case $cho in
+  a)
+clear
+   cond=false
+   until $cond
+   do
+   clear
+echo "=============================== Delete Course =================================="
+    #delete a spacific course
+   
+
+echo enter the Course Id :
+read cId
+
+  while [ "$cId" != "$(echo $cId | grep [a-z][a-z][a-z][a-z][0-9][0-9][0-9])" ]
+  do
+	echo "plz enter the course id in format like xxxx###(java321) :"
+	read cId
+  done
+
+############################
+id=$(cat courses | cut -d: -f1)
+for I in $id
+do
+  if [ "$cId" = "$I" ]
+  then 
+    echo the course is :
+    cat courses | grep $cId
+    sed -i "/$cId/d" courses
+    echo you have been deleted course "'"$cId"'" in the system successfully
+    con=true
+    break 1
+  else
+    con=false
+  fi
+
+  #if [ "$cId" != "$I" ]
+  #then
+    #con=false
+    #echo there is no "'"$cId"'" course regeister in system
+  #fi
+
+done
+    if [ "$con" = "false" ]
+    then
+      echo there is no "'"$cId"'" course regeister in system
+    else
+      echo
+    fi
+    #echo the course is :
+    #cat courses | grep -i $cId
+    #b=$(cat courses | grep -i $cId) ###################
+#if [ "$cId" = "$(echo $cId | grep [a-z][a-z][a-z][a-z][0-9][0-9][0-9])" ]
+#then
+	#old=$(cat courses | grep $cId)
+	###sed -i "/$cId/d" courses
+	# or grep -v $cId courses
+	###echo you has been delete course "'"$cId"'" in the system successfully
+	#cat courses
+	#echo $old | sed -i "s/$old/" "/g" courses
+#else
+  #echo there is no "'"$cId"'" course regeister in system
+#fi
+
+
+    
+    #cat courses | grep $course | sed -i 's/"$d"/" "/g' courses
+
+echo "do you want to delete another courses ? (y or n)"
+read yn
+	if [ "$yn" = "n" ]
+	then
+	  cond=true
+	elif [ "$yn" = "y" ]
+        then
+	  cond=false
+        fi
+   done
+  ;;
+  b)
+    #bla bla delete command
+echo Course_Id:Full_Name:ISBN_Number:InstructorName1"_"InstructorName2 > courses
+  echo you has been delete all courses in the system successfully
+
+  break 1
+  ;;
+  c)
+
+    clear
+
+echo "=============================== Modify Course Info ============================="
+    echo enter the Course Id :	
+    read cour
+    while [ "$cour" != "$(echo $cour | grep [a-z][a-z][a-z][a-z][0-9][0-9][0-9])" ]
+    do
+	echo "plz enter the course id in format like xxxx###(java321) :"
+	read cour
+    done
+# to check if the course is in the system or not
+
+    idc=$(cat courses | cut -d: -f1)
+    for Id in $idc
+    do
+      if [ "$cour" = "$Id" ]
+      then 
+
+	echo the course info is :
+	cat courses | grep $cour
+	bla=$(cat courses | grep $cour)
+    echo
+    echo "enter your choice from (1-2) : "
+    echo 1")" Modify ISBN
+    echo 2")" Modify Last Name Of The Instructor
+    read b
+    case $b in
+    1) 
+	old=$(cat courses | grep $cour | cut -d: -f3)
+   	echo enter new ISBN number :
+    	read isbn
+	while [ "$isbn" != "$(echo $isbn | grep [0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9])" ]
+	do
+  	  echo "plz try agian in format like ##-###-##### (00-000-00000) : "
+  	  read isbn
+	done
+	#or echo $old | sed -i 's///g'> courses####the other onee
+	echo $bla | sed -i "s/$old/$isbn/g" courses
+	cat courses | grep $cour
+	#echo $bla
+	echo the ISBN update successfully
+    ;;
+    2)	
+	oldname=$(cat courses | grep $cour | cut -d: -f4 | cut -d_ -f2)
+	#echo $oldname
+	echo enter the new instructor last name :
+	read instName2
+	#echo $bla | sed -i 's/$oldname/$instName/g' courses
+	newn=$(echo $bla | sed -i "s/$oldname/$instName2/g" courses)
+	#echo $newn
+	
+	cat courses | grep $cour
+	echo the last has been name updated successfully
+    ;;
+    *)
+	echo USAGE : Wrong Value
+    ;; 
+    esac
+    
+    con=true
+    break 1
+  else
+    con=false
+  fi
+
+done
+    if [ "$con" = "false" ]
+    then
+      echo there is no "'"$cour"'" course regeister in system
+    else
+      echo
+    fi
+
+  ;;
+  *)
+    echo USAGE : Wrong Value
+  ;;
+  esac
+
+echo "do you want to modify courses ? (y or n)"
+read Yn
+	if [ "$Yn" = "n" ]
+	then
+	condit=true
+	elif [ "$Yn" = "y" ]
+        then
+	condit=false
+        fi
+   done
+;;
+3)
+  #Search_Course
+clear
+echo "================================== Search Course ==============================="
+echo "enter your choice (a or b) :"
+echo a")" Search By Id Number 
+echo b")" Search By Name Of Instructor
+read op
+  case $op in
+  a)
+    ## search by id number
+condit=false
+until $condit
+do
+	clear
+	echo "============================= Search By Id Number =============================="
+	echo Enter The Id Number Of The Course To Search :
+	read ID
+	
+	while [ "$ID" != "$(echo $ID | grep [a-z][a-z][a-z][a-z][0-9][0-9][0-9])" ]
+	do
+	  echo "plz enter the course id in format like xxxx###(java321) :"
+	  read ID
+	done
+
+	#cat courses | grep $ID
+id=$(cat courses | cut -d: -f1)
+for I in $id
+do
+  if [ "$ID" = "$I" ]
+  then 
+    echo the result of the search :
+    cat courses | grep $ID
+    cn=true
+    break 1
+  else
+    cn=false
+  fi
+done
+    if [ "$cn" = "false" ]
+    then
+      echo there is no "'"$ID"'" course regeister in system
+    else
+      echo
+    fi
+	#cat courses | grep $ID | tr ":" " "
+	#echo $s | sort -V
+	#for info in $s
+	#do
+	  #echo $info
+	#done
+        
+	#| sort -n courses
+	#cat courses | grep 111 |cut -d: -f1 | tr -s "a-z" " "
+	#for i in $(cat courses | grep $id | cut -d: -f1 | tr -s "a-z" " ")
+	#if [ "$id" != "$i" ]
+	#then
+	  #echo there is no id match
+	#fi
+echo "do you want to search another courses ? (y or n)"
+read yNo
+	if [ "$yNo" = "n" ]
+	then
+	condit=true
+	elif [ "$yNo" = "y" ]
+        then
+	condit=false
+        fi
+done
+  ;;
+  b)
+    #search by name of the instructor
+  clear
+  echo "========================= Search By Name Of The Instructor ====================="
+  echo "enter your choice (1 to 3) :"
+  echo 1")" search by first name
+  echo 2")" search by last name
+  echo 3")" search by part of the name
+  read namen
+  case $namen in
+  1)
+	clear
+	echo "============================= Search By First Name ============================="
+
+	ma=$(cat courses | cut -d: -f4 | cut -d_ -f1)
+
+
+	echo enter the first name of instructor : 
+	read fn
+	
+	#for fName in $ma
+	#do
+	  #if [ "$fn" = "$fName" ]
+	  #then
+		#bb=$(cat courses | grep $fName)
+	    #echo $bb > sortFile.txt
+
+	  #elif [ "$fn" != "$fName" ]
+		#continue
+	  #else
+		#continue
+	  #fi
+	#done
+
+	    #cat courses | grep :$fn |sort -k2 -t:
+
+	# what i did right here is ask the user to enter first name of the instructor and compare it to first name in the courses file and then sort it if not it will print to admin there is no instructor in the system
+
+	fname=$(cat courses | cut -d: -f4 |cut -d_ -f1 )
+	for f in $fname
+	do
+	if [ "$fn" = "$f" ]
+	then
+	  conditionFN=true
+	  cat courses | grep :$fn | sort -k2 -t:
+	  break 1
+
+	else
+	  conditionFN=false
+	fi
+	done
+
+	if [ "$conditionFN" = "false" ]
+	then
+	  echo there is no instructor his first name is "'"$fn"'" in our system
+	else
+	  echo
+	fi
+
+  ;;
+  2)
+	clear
+	echo "============================= Search By Last Name =============================="
+
+
+	echo enter the last name of instructor : 
+	read ln
+
+
+	lname=$(cat courses | cut -d: -f4 |cut -d_ -f2 )
+	for l in $lname
+	do
+	if [ "$ln" = "$l" ]
+	then
+	  conditionLN=true
+	  cat courses | grep _$ln | sort -k2 -t:
+	  break 1
+
+	else
+	conditionLN=false
+
+
+	fi
+	done
+
+	if [ "$conditionLN" = "false" ]
+	then
+	  echo there is no instructor his last name is "'"$ln"'" in our system
+	else
+	  echo
+	fi
+
+  ;;
+  3)
+  
+	clear
+	echo "============================= Search By Part Of Name ==========================="
+
+	echo enter the part name of instructor : 
+	read pOfN
+	cat courses | grep $pOfN | sort -k2 -t:
+
+  ;;
+  *)
+  echo USAGE : Wrong Value
+  ;;
+  esac
+  ;;
+  *)
+    echo USAGE : Wrong Value
+  ;;
+  esac
+;;
+4)
+# if the input 4 this mean exit from the script
+exit
+;;
+*)
+echo USAGE : Wrong Value
+;;
+
+
+esac
+
+echo "do you want back to main menu ? (y or n)"
+read yOrN
+	if [ "$yOrN" = "n" ]
+	then
+	exit
+	elif [ "$yOrN" = "y" ]
+        then
+	condition=false
+        fi
+done
